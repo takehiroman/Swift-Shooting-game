@@ -1,4 +1,4 @@
 swiftsimplegame
 ===============
 
-seiftとspritekitを使ったカジュアルなゲーム
+swiftとspritekitを使ったカジュアルなゲーム
