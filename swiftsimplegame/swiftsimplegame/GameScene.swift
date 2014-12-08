@@ -32,24 +32,25 @@ class GameScene: SKScene {
 			sprite.position.y
 		)
             }
-	
+	//バレットノード
+	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド
+	func shoot() {
+		let bullet = SKSpriteNode(imageNamed:"bullet")
+		bullet.position = CGPoint(x: sprite.position.x, y: sprite.position.y + 40)
+		bullet.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(40, 40))
+		bullet.physicsBody?.affectedByGravity = false
+		bullet.physicsBody?.velocity = CGVectorMake(0, 200)
+		bullet.physicsBody?.linearDamping = 0.0
+		self.addChild(bullet)
+	}
+	//画面にタッチした時
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
 		let touch: AnyObject! = touches.anyObject()
 		beganPos = touch.locationInNode(self)
 		
 	}
-	//バレットノード
-	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド
-	func shoot() {
-		let square = SKSpriteNode(imageNamed:"bullet")
-		square.position = CGPoint(x: sprite.position.x, y: sprite.position.y + 40)
-		square.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(40, 40))
-		square.physicsBody?.affectedByGravity = false
-		square.physicsBody?.velocity = CGVectorMake(0, 200)
-		square.physicsBody?.linearDamping = 0.0
-		self.addChild(square)
-	}
+	//画面をスライドした時
 	override func touchesMoved(touches: (NSSet!), withEvent event: UIEvent) {
 		//変数タッチ
 		let touch: AnyObject! = touches.anyObject()
@@ -67,6 +68,7 @@ class GameScene: SKScene {
 			
 		)
 	}
+	//画面から指を離した時
 	override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
 		
 		startPos = CGPointMake(sprite.position.x, sprite.position.y)
