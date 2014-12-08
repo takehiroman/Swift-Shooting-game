@@ -9,29 +9,82 @@
 import SpriteKit
 
 class GameScene: SKScene {
+	//グローバル変数
+	var sprite: SKSpriteNode!
+	var beganPos: CGPoint!
+	var startPos: CGPoint!
+	var last:CFTimeInterval!
+	
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
+		//プレイヤーノード
+		sprite = SKSpriteNode(imageNamed:"Spaceship")
 		
-		let sprite = SKSpriteNode(imageNamed:"Spaceship")
-		
-		sprite.xScale = 0.5
-		sprite.yScale = 0.5
-		sprite.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
+		sprite.xScale = 0.3
+		sprite.yScale = 0.3
+		sprite.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame)/3);
 		
 		self.addChild(sprite)
+		
+		
+		//初期座標
+		startPos = CGPointMake(
+			sprite.position.x,
+			sprite.position.y
+		)
             }
 	
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            
+		let touch: AnyObject! = touches.anyObject()
+		beganPos = touch.locationInNode(self)
+		
+	}
+	//バレットノード
+	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド
+	func shoot() {
+		let square = SKSpriteNode(imageNamed:"bullet")
+		square.position = CGPoint(x: sprite.position.x, y: sprite.position.y + 40)
+		square.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(40, 40))
+		square.physicsBody?.affectedByGravity = false
+		square.physicsBody?.velocity = CGVectorMake(0, 200)
+		square.physicsBody?.linearDamping = 0.0
+		self.addChild(square)
+	}
+	override func touchesMoved(touches: (NSSet!), withEvent event: UIEvent) {
+		//変数タッチ
+		let touch: AnyObject! = touches.anyObject()
+		//
+		var movedPos:CGPoint = touch.locationInNode(self)
+		
+		//移動後の座標から移動前の座標を引いた数値
+		var diffPos:CGPoint = CGPointMake(
+			movedPos.x - beganPos.x,
+			0
+		)
+		sprite.position = CGPointMake(
+			startPos.x + diffPos.x,
+			startPos.y + diffPos.y
 			
-        }
-    }
-   
+		)
+	}
+	override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+		
+		startPos = CGPointMake(sprite.position.x, sprite.position.y)
+	}
+	
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+		// lastが未定義ならば、今の時間を入れる。
+		if !(last != nil) {
+			last = currentTime
+		}
+		
+		// 0.5秒おきに行う処理をかく。
+		if last + 1 <= currentTime {
+			
+			self.shoot()
+			
+			last = currentTime
+		}
     }
 }
