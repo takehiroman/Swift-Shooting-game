@@ -87,16 +87,16 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		enemy.physicsBody?.affectedByGravity = false
 		enemy.physicsBody?.linearDamping = 0.0
 		enemy.physicsBody?.velocity = CGVectorMake(0, -120)
-		
-		// カテゴリを設定する。
-		enemy.physicsBody?.categoryBitMask = enemyCategory
-		enemy.physicsBody?.contactTestBitMask = bulletCategory
-		
 		enemy.position = CGPoint(
 			x: CGFloat(x),
 			y: CGRectGetMaxY(self.frame)
 		)
 		self.addChild(enemy)
+		
+		// カテゴリを設定する。
+		enemy.physicsBody?.categoryBitMask = enemyCategory
+		enemy.physicsBody?.contactTestBitMask = bulletCategory
+		
 	}
 	
 	//画面にタッチした時
@@ -170,7 +170,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		
 		var firstBody, secondBody: SKPhysicsBody
 		
-		// firstを赤、secondを緑とする。
+		// firstを弾、secondを敵とする。
 		if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
 			firstBody = contact.bodyA
 			secondBody = contact.bodyB
