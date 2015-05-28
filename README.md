@@ -1,4 +1,4 @@
-swiftsimplegame
+swift-Shooting-game
 ===============
 
 swiftとspritekitを使ったカジュアルなゲーム
