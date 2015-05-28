@@ -14,24 +14,24 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 	var sprite: SKSpriteNode!
 	var beganPos: CGPoint!
 	var startPos: CGPoint!
-	var width: Int!
+    var width: Int!
 	var scoreLabelNode = SKLabelNode();
 	var score = NSInteger();
 	
 	// インターバルを用意する。
 	var lastEnemy: CFTimeInterval!
 	var lastBullet: CFTimeInterval!
+
 	
+    // カテゴリを用意しておく。
+    let bulletCategory: UInt32 = 0x1 << 0
+    let enemyCategory: UInt32 = 0x1 << 1
 	
-	// カテゴリを用意しておく。
-	let bulletCategory: UInt32 = 0x1 << 0
-	let enemyCategory: UInt32 = 0x1 << 1
-	
-	override func didMoveToView(view: SKView) {
+    override func didMoveToView(view: SKView) {
 		
 		// contactDelegateをselfにしておく。
 		self.physicsWorld.contactDelegate = self
-		
+
 		
 		//プレイヤーノード
 		sprite = SKSpriteNode(imageNamed:"Spaceship")
@@ -45,7 +45,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 			sprite.position.x,
 			sprite.position.y
 		)
-		
+
 		
 		//スコアラベルノード
 		score = 0
@@ -54,13 +54,13 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		scoreLabelNode.zPosition = 50
 		scoreLabelNode.text = String(score)
 		self.addChild(scoreLabelNode)
+
 		
-		
-		// 画面の幅をIntでとる。
-		self.width = 300
-		
-		
-	}
+        // 画面の幅をIntでとる。
+        self.width = 300
+        
+        
+		            }
 	//バレットノード
 	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド
 	
@@ -72,44 +72,44 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		bullet.physicsBody?.velocity = CGVectorMake(0, 200)
 		bullet.physicsBody?.linearDamping = 0.0
 		self.addChild(bullet)
-		
-		// カテゴリを設定する。
-		bullet.physicsBody?.categoryBitMask = bulletCategory
-		bullet.physicsBody?.contactTestBitMask = enemyCategory
+        
+        // カテゴリを設定する。
+        bullet.physicsBody?.categoryBitMask = bulletCategory
+        bullet.physicsBody?.contactTestBitMask = enemyCategory
 	}
-	//エネミーノード
-	// ここで敵を発生させるメソッドを用意する。
-	func createEnemy(x: UInt) {
-		
-		let enemy = SKSpriteNode(imageNamed:"circleNode")
-		
-		enemy.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(40, 40))
-		enemy.physicsBody?.affectedByGravity = false
-		enemy.physicsBody?.linearDamping = 0.0
-		enemy.physicsBody?.velocity = CGVectorMake(0, -120)
-		enemy.position = CGPoint(
-			x: CGFloat(x),
-			y: CGRectGetMaxY(self.frame)
-		)
-		self.addChild(enemy)
-		
-		// カテゴリを設定する。
-		enemy.physicsBody?.categoryBitMask = enemyCategory
-		enemy.physicsBody?.contactTestBitMask = bulletCategory
-		
-	}
-	
+    //エネミーノード
+    // ここで敵を発生させるメソッドを用意する。
+    func createEnemy(x: UInt) {
+        
+        let enemy = SKSpriteNode(imageNamed:"circleNode")
+        
+        enemy.physicsBody = SKPhysicsBody(rectangleOfSize: CGSizeMake(40, 40))
+        enemy.physicsBody?.affectedByGravity = false
+        enemy.physicsBody?.linearDamping = 0.0
+        enemy.physicsBody?.velocity = CGVectorMake(0, -120)
+        
+        // カテゴリを設定する。
+        enemy.physicsBody?.categoryBitMask = enemyCategory
+        enemy.physicsBody?.contactTestBitMask = bulletCategory
+        
+        enemy.position = CGPoint(
+            x: CGFloat(x),
+            y: CGRectGetMaxY(self.frame)
+        )
+        self.addChild(enemy)
+    }
+    
 	//画面にタッチした時
-	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-		/* Called when a touch begins */
-		let touch: AnyObject! = touches.anyObject()
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        /* Called when a touch begins */
+		if let touch = touches.first as? UITouch{
 		beganPos = touch.locationInNode(self)
-		
+		}
 	}
 	//画面をスライドした時
-	override func touchesMoved(touches: (NSSet!), withEvent event: UIEvent) {
+	override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
 		//変数タッチ
-		let touch: AnyObject! = touches.anyObject()
+		if let touch = touches.first as? UITouch{
 		//
 		var movedPos:CGPoint = touch.locationInNode(self)
 		
@@ -123,14 +123,15 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 			startPos.y + diffPos.y
 			
 		)
+		}
 	}
 	//画面から指を離した時
-	override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+	override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
 		
 		startPos = CGPointMake(sprite.position.x, sprite.position.y)
 	}
 	//画面内でアップデート
-	override func update(currentTime: CFTimeInterval) {
+    override func update(currentTime: CFTimeInterval) {
 		
 		if !(lastEnemy != nil){
 			lastEnemy = currentTime
@@ -149,45 +150,45 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		if lastEnemy + 1 <= currentTime {
 			
 			
-			
-			// 敵が生成されるx軸の位置をきめる。
-			// センターから、「0<=乱数<=幅」なる乱数を足して、幅の半分を引く。
-			var xEnemyPos: UInt! = UInt(CGRectGetMidX(self.frame))
-				+ UInt(arc4random_uniform(UInt32(self.width)))
-				- UInt(self.width / 2)
-			
-			self.createEnemy(xEnemyPos)
+            
+            // 敵が生成されるx軸の位置をきめる。
+            // センターから、「0<=乱数<=幅」なる乱数を足して、幅の半分を引く。
+            var xEnemyPos: UInt! = UInt(CGRectGetMidX(self.frame))
+                + UInt(arc4random_uniform(UInt32(self.width)))
+                - UInt(self.width / 2)
+            
+            self.createEnemy(xEnemyPos)
 			
 			lastEnemy = currentTime
 		}
 		
-	}
-	
-	
-	
-	//衝突したとき。
-	func didBeginContact(contact: SKPhysicsContact!) {
-		
-		var firstBody, secondBody: SKPhysicsBody
-		
-		// firstを弾、secondを敵とする。
-		if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-			firstBody = contact.bodyA
-			secondBody = contact.bodyB
-		} else {
-			firstBody = contact.bodyB
-			secondBody = contact.bodyA
-		}
-		
-		// 弾と敵が接したときの処理。
-		if firstBody.categoryBitMask & bulletCategory != 0 &&
-			secondBody.categoryBitMask & enemyCategory != 0 {
-				firstBody.node?.removeFromParent()
-				secondBody.node?.removeFromParent()
+		    }
+
+
+    
+    //衝突したとき。
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+        var firstBody, secondBody: SKPhysicsBody
+        
+        // firstを弾、secondを敵とする。
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        // 弾と敵が接したときの処理。
+        if firstBody.categoryBitMask & bulletCategory != 0 &&
+            secondBody.categoryBitMask & enemyCategory != 0 {
+                firstBody.node?.removeFromParent()
+                secondBody.node?.removeFromParent()
 				score++
 				scoreLabelNode.text = String(score)
+
 				
-				
-		}
-	}
+        }
+    }
 }

@@ -1,0 +1,6 @@
+version: "Apple Swift version 1.2 (swiftlang-602.0.53.1 clang-602.0.53)"
+options: "df9df16741fc220b36df7498f03bfdd5"
+inputs: 
+- "/Users/tsuzakitakehiro/swiftsimplegame/swiftsimplegame/swiftsimplegame/GameScene.swift"
+- "/Users/tsuzakitakehiro/swiftsimplegame/swiftsimplegame/swiftsimplegame/GameViewController.swift"
+- "/Users/tsuzakitakehiro/swiftsimplegame/swiftsimplegame/swiftsimplegame/AppDelegate.swift"

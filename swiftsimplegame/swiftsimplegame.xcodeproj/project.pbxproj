@@ -416,6 +416,7 @@
 				F0D986A21A31766C006CC01F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F0D986A31A31766C006CC01F /* Build configuration list for PBXNativeTarget "swiftsimplegameTests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +425,7 @@
 				F0D986A51A31766C006CC01F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
