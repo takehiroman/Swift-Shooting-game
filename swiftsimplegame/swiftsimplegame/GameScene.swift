@@ -62,8 +62,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
 		            }
 	//バレットノード
-	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド
-	
+	// 赤い丸を、プレイヤーから上に向かって打ち出すメソッド	
 	func shoot() {
 		let bullet = SKSpriteNode(imageNamed:"bullet")
 		bullet.position = CGPoint(x: sprite.position.x, y: sprite.position.y + 40)
@@ -99,18 +98,17 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         self.addChild(enemy)
     }
     
-	//画面にタッチした時
+	//画面にタッチした時の処理
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
 		if let touch = touches.first as? UITouch{
 		beganPos = touch.locationInNode(self)
 		}
 	}
-	//画面をスライドした時
+	//画面をスライドした時の処理
 	override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
 		//変数タッチ
 		if let touch = touches.first as? UITouch{
-		//
 		var movedPos:CGPoint = touch.locationInNode(self)
 		
 		//移動後の座標から移動前の座標を引いた数値
@@ -125,7 +123,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 		)
 		}
 	}
-	//画面から指を離した時
+	//画面から指を離した時の処理
 	override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
 		
 		startPos = CGPointMake(sprite.position.x, sprite.position.y)
@@ -166,7 +164,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 
 
     
-    //衝突したとき。
+    //弾と敵が衝突したときの処理
     func didBeginContact(contact: SKPhysicsContact) {
         
         var firstBody, secondBody: SKPhysicsBody
